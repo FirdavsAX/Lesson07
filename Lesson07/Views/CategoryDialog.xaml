@@ -9,10 +9,12 @@
     mc:Ignorable="d">
     <StackPanel>
         <TextBox
+            Margin="10"
               VerticalAlignment="Center"
               materialDesign:HintAssist.Hint="Enter Caterory Name"
               Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-            Text="{Binding NewCategoryName}"/>
-        <Button Command="{Binding SaveCommand}" Content="Save" />
+            Text="{Binding CategoryName}"/>
+        <Button Margin="10"
+            Command="{Binding SaveCommand}" Content="Save" />
     </StackPanel>
 </UserControl>

@@ -14,6 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using Lesson07.Data;
+using Lesson07.Models;
+using Prism.Commands;
 namespace Lesson07.Views
 {
     /// <summary>
@@ -21,11 +24,48 @@ namespace Lesson07.Views
     /// </summary>
     public partial class CategoryDialog : UserControl
     {
-        
+        private readonly InventoryDbContext database;
+        public string CategoryName { get; set; }
+        public ICommand SaveCommand { get; private set; }
+
         public CategoryDialog()
         {
             InitializeComponent();
             DataContext = this;
+
+            database = new();
+            SaveCommand = new DelegateCommand(OnSave);
+        }
+        private void OnSave()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(CategoryName))
+                {
+                    CategoryName = "CAtegory name can't be empty!";
+                    return;
+                }
+              
+
+                Category category = new()
+                {
+                    Name = CategoryName,
+                };
+
+                var messageBoxResult = MessageBox.Show(
+                   "Are you sure!", "Attention", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (messageBoxResult is MessageBoxResult.No) { return; }
+
+                database.Categories.Add(category);
+                database.SaveChanges();
+
+                MessageBox.Show("Category successfully created");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
     }
